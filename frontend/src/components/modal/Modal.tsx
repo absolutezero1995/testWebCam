@@ -47,10 +47,10 @@
       isOpen && (
         <>
           <div className="modal-overlay">
-            <video autoPlay loop muted className="video-background">
+            {/* <video autoPlay loop muted className="video-background">
               <source src="../../SvoyaIgra/neurons.mp4" type="video/mp4" />
               Your browser does not support the video tag.
-            </video>
+            </video> */}
             <div className="modal-content">
               <button className="close-button" onClick={onClose}>
                 Закрыть
@@ -60,7 +60,7 @@
               <p>{timer}</p>
               <div>
                 <AudioPlayer
-                  src="../../public/SvoyaIgra/svoya_igra-30-sec.mp3"
+                  src="https://allsoundsaround.com/wp-content/uploads/2020/12/vstuplenie-5579.mp3?_=6"
                   autoPlay
                   controls={false}
                   onPlay={handlePlay}
