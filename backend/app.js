@@ -105,19 +105,22 @@ io.of('/').adapter.on('create-room', (room) => {
         const userStream = socket.userStream;
 
         if (userStream) {
-          // Если у пользователя есть видеопоток, добавляем его к общему мастер-потоку
-          if (!masterStream) {
-            masterStream = userStream;
-          } else {
-            const masterTracks = masterStream.getTracks();
-            masterTracks.forEach((track) => {
-              userStream.addTrack(track);
-            });
-            masterStream = userStream;
-          }
+          // Создаем новый MediaStream и добавляем в него треки от всех пользователей в комнате
+          const allTracks = [];
+          io.of('/').adapter.rooms[room].forEach((id) => {
+            const userSocket = io.sockets.sockets[id];
+            if (userSocket && userSocket.userStream) {
+              userSocket.userStream.getTracks().forEach((track) => {
+                allTracks.push(track);
+              });
+            }
+          });
 
-          // Рассылаем обновленный мастер-поток всем пользователям в комнате
-          io.to(room).emit('stream', { socketId: 'master', stream: masterStream });
+          // Если есть треки, создаем новый MediaStream и рассылаем его всем пользователям в комнате
+          if (allTracks.length > 0) {
+            const combinedStream = new MediaStream(allTracks);
+            io.to(room).emit('stream', { socketId: 'master', stream: combinedStream });
+          }
         }
       }
     });
