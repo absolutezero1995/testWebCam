@@ -1,0 +1,28 @@
+.home-container {
+  display: flex;
+  flex-direction: row;
+  max-height: 100vh; /* Изменим максимальную высоту на 100vh, чтобы контейнер был равен высоте экрана */
+  overflow-y: auto; /* Добавим прокрутку по вертикали, если контент выходит за пределы */
+}
+
+.video-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  height: 100%;
+  overflow-y: auto; /* Добавим прокрутку по вертикали, если контент выходит за пределы */
+}
+
+.video-square {
+  width: 150px;
+  height: 150px;
+  margin: 10px;
+  overflow: hidden;
+}
+
+.video-square video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

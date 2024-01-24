@@ -1,0 +1,59 @@
+.navbar {
+    overflow: hidden;
+    text-align: center;
+  }
+  
+  .navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .navbar li {
+    margin: 0 20px;
+    transition: transform 0.1s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.3s ease-in-out 0.1s;
+  }
+  
+  .navbar a {
+    display: block;
+    color: #cabfbf;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: background-color 0.8s ease-in-out, color 1s ease-in-out;
+    animation: none;
+  }
+  
+  @keyframes vibrate {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    50% {
+        transform: translateX(5px);
+    }
+    75% {
+        transform: translateX(-5px);
+    }
+  }
+  
+  .navbar a:hover {
+    background-color: #ddd;
+    color: #333;
+    animation: none;
+  }
+  
+  .navbar li:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  
+  .active {
+    background-color: #0ea800;
+    transition: transform 0.1s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease-in-out 0.1s;
+  }

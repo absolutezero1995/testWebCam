@@ -1,0 +1,27 @@
+.table__containter {
+    width: 90%;
+    padding-top: 60px;
+    display: grid;
+    grid-template-row: auto auto auto auto auto auto;
+    column-gap: 50px;
+}
+
+.category__container {
+    display: flex;
+    flex-direction: row;
+}
+
+.category__item {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border: 2px solid green;
+}
+
+.category__item:hover {
+    background-color: green;
+    cursor: pointer;
+}
