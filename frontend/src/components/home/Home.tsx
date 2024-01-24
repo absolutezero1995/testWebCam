@@ -27,8 +27,6 @@ const Home: React.FC = () => {
   const peerVideoContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    socket.current = io();
-
     const initializeMediaStream = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -49,6 +47,8 @@ const Home: React.FC = () => {
             console.error('Ошибка воспроизведения видео:', error);
           });
         }
+
+        socket.current = io();
 
         socket.current?.on('stream', (streamData: StreamData) => {
           const { socketId, stream } = streamData;
@@ -85,7 +85,7 @@ const Home: React.FC = () => {
         tracks.forEach((track) => track.stop());
       }
     };
-  }, [peerConnections]);
+  }, []);
 
   return (
     <div className='home-container'>
