@@ -106,19 +106,19 @@ io.of('/').adapter.on('create-room', (room) => {
 
         if (userStream) {
           // Создаем новый MediaStream и добавляем в него треки от всех пользователей в комнате
-          const allTracks = [];
+          const combinedStream = new MediaStream();
+
           io.of('/').adapter.rooms[room].forEach((id) => {
             const userSocket = io.sockets.sockets[id];
             if (userSocket && userSocket.userStream) {
               userSocket.userStream.getTracks().forEach((track) => {
-                allTracks.push(track);
+                combinedStream.addTrack(track);
               });
             }
           });
 
-          // Если есть треки, создаем новый MediaStream и рассылаем его всем пользователям в комнате
-          if (allTracks.length > 0) {
-            const combinedStream = new MediaStream(allTracks);
+          // Рассылаем обновленный мастер-поток всем пользователям в комнате
+          if (combinedStream.getTracks().length > 0) {
             io.to(room).emit('stream', { socketId: 'master', stream: combinedStream });
           }
         }
