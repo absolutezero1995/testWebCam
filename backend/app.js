@@ -60,12 +60,19 @@ function randomBytes(size, cb) {
 
 config(app);
 
+let masterStream = null;
+
 io.on('connection', (socket) => {
   console.log('User connected');
 
   socket.on('join', () => {
     // Присоединение к комнате
     socket.join('video-chat');
+
+    // Если уже есть мастер-поток, отправляем его новому пользователю
+    if (masterStream) {
+      socket.emit('stream', { socketId: socket.id, stream: masterStream });
+    }
   });
 
   socket.on('offer', (offer, targetSocketId) => {
@@ -83,16 +90,42 @@ io.on('connection', (socket) => {
     socket.to(targetSocketId).emit('ice-candidate', candidate);
   });
 
-  socket.on('stream', (streamData) => {
-    // Пересылка видеопотока всем остальным пользователям в комнате
-    socket.to('video-chat').emit('stream', streamData);
-  });
-
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
 });
 
-server.listen(PORT, () => {
-  console.log("Сервер запущен на порту:", PORT);
+// Обработка нового видеопотока от пользователя
+io.of('/').adapter.on('create-room', (room) => {
+  if (room === 'video-chat') {
+    io.of('/').adapter.rooms[room].on('add', (socketId) => {
+      const socket = io.sockets.sockets[socketId];
+
+      if (socket) {
+        const userStream = socket.userStream;
+
+        if (userStream) {
+          // Если у пользователя есть видеопоток, добавляем его к общему мастер-потоку
+          if (!masterStream) {
+            masterStream = userStream;
+          } else {
+            const masterTracks = masterStream.getTracks();
+            masterTracks.forEach((track) => {
+              userStream.addTrack(track);
+            });
+            masterStream = userStream;
+          }
+
+          // Рассылаем обновленный мастер-поток всем пользователям в комнате
+          io.to(room).emit('stream', { socketId: 'master', stream: masterStream });
+        }
+      }
+    });
+  }
 });
+
+app.use("/", IndexRout);
+
+app.listen(PORT, () => {
+  console.log("Сервер запущен на порту:", PORT);
+})
