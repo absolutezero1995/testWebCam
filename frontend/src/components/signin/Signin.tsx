@@ -28,7 +28,7 @@ const Signin: React.FC<SigninProps> = ({ setIsAuth }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/api/signin", {
+      const response = await fetch("/api/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

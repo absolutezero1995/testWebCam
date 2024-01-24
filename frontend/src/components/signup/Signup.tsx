@@ -35,7 +35,7 @@ const Signup: React.FC<SignupProps> = ({ setIsAuth }) => {
         }
 
         try {
-            const response = await fetch('http://localhost:3000/api/signup', {
+            const response = await fetch('/api/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

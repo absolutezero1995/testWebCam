@@ -14,7 +14,7 @@ const Navbar: React.FC<NavbarProps> = ({ setIsAuth, isAuth }) => {
   const handleLogOut = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/api/logout", {
+      const response = await fetch("/api/logout", {
         credentials: "include",
       });
       if (response.ok) {
